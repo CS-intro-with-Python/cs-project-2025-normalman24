@@ -1,0 +1,38 @@
+name: create_docker
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-action-buildx@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-server:latest .
+
+      - name: Run container
+        run: |
+          docker run -d -p 8080:8080 --name test-server my-server:latest
+          sleep 5
+          docker logs test-server
+
+      - name: Check container status
+        run: |
+          docker ps | grep test-server
+
+      - name: Stop and remove container
+        if: always()
+        run: |
+          docker stop test-server
+          docker rm test-server
