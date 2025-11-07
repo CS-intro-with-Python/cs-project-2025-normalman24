@@ -1,38 +1,36 @@
-name: create_docker
+name: Build and Run Docker Container
 
 on:
   push:
-    branches: ["main"]
+    branches: [ main ]
   pull_request:
-    branches: ["main"]
+    branches: [ main ]
 
 jobs:
-  build:
+  build-and-run:
     runs-on: ubuntu-latest
-    steps:
 
-      - name: Checkout branch
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
+      # 2. Build the Docker image
       - name: Build Docker image
+        working-directory: ./app
         run: |
-          docker build -t my-server:latest .
+          docker build -t my-web-app:latest .
 
-      - name: Run container
+      # 3. Run the Docker container
+      - name: Run Docker container
+        working-directory: ./app
         run: |
-          docker run -d -p 8080:8080 --name test-server my-server:latest
-          sleep 5
-          docker logs test-server
+          docker run -d \
+            --name my-web-container \
+            -p 8000:8000 \
+            my-web-app:latest
 
-      - name: Check container status
+      # 4. Verify container is running
+      - name: Verify running container
         run: |
-          docker ps | grep test-server
-
-      - name: Stop and remove container
-        if: always()
-        run: |
-          docker stop test-server
-          docker rm test-server
+          docker ps
