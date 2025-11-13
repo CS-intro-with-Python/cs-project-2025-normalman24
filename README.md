@@ -3,31 +3,48 @@
 
 ## Description
 
-Describe the project in 2-3 sentences (You can use more). 
+BookHub is a web platform that allows users to share the books they have read.  
+When someone finishes a book, they can upload it to the platform, including:
+
+- Book cover  
+- Author  
+- Description  
+- Year of publication  
+- Number of pages
 
 ## Setup
 
 Describe the steps to set up the environment and run the application. This can be a bash script or docker commands.
 
 ```
-Your commands
-
+docker build -t bookhub .
+docker run -p 5000:5000 bookhub
+python app/main.py # The app will start at http://localhost:5000
 ```
 
 ## Requirements
 
-Describe technologies, libraries, languages you are using (this can be updated in the future).
+```pip install -r requirements.txt```
 
 ## Features
 
 Describe the main features the application performs.
 
-* Feature 1
-* Feature 2
+The key feature is that users can add their impressions about the book.  
+An impression includes:
+
+- Text (review)
+- Overall score (on a 1–10 scale)
+- Period of reading (years, months, days, hours, or "less than 1 hour")
+
+Additional planned features:
+
+- Search by author, title, or year
+- Rating aggregation
 
 ## Git
 
-Specify which branch will store the latest stable version of the application
+```git checkout origin main```
 
 ## Success Criteria
 
