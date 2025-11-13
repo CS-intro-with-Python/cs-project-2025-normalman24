@@ -35,9 +35,13 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
       - name: Deploy to Railway
-        uses: railwayapp/railway-action@v1
-        with:
-          service: bookhub
-          projectId: ${{ secrets.RAILWAY_PROJECT_ID }}
-          apiKey: ${{ secrets.RAILWAY_API_KEY }}
+        env:
+          RAILWAY_API_KEY: ${{ secrets.RAILWAY_API_KEY }}
+        run: railway up --service bookhub
