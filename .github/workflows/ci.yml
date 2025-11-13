@@ -1,36 +1,43 @@
-name: Build and Run Docker Container
+name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
 
 jobs:
-  build-and-run:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # 2. Build the Docker image
-      - name: Build Docker image
-        working-directory: ./app
-        run: |
-          docker build -t my-web-app:latest .
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-      # 3. Run the Docker container
-      - name: Run Docker container
-        working-directory: ./app
+      - name: Install dependencies
         run: |
-          docker run -d \
-            --name my-web-container \
-            -p 8000:8000 \
-            my-web-app:latest
+          pip install -r requirements.txt
 
-      # 4. Verify container is running
-      - name: Verify running container
+      - name: Run Flask in background and test route
         run: |
-          docker ps
+          python app/main.py &
+          sleep 5
+          python tests/test_routes.py
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy to Railway
+        uses: railwayapp/railway-action@v1
+        with:
+          service: bookhub
+          projectId: ${{ secrets.RAILWAY_PROJECT_ID }}
+          apiKey: ${{ secrets.RAILWAY_API_KEY }}
