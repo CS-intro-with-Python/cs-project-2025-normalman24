@@ -18,13 +18,14 @@ Describe the steps to set up the environment and run the application. This can b
 
 ```
 docker build -t bookhub .
-docker run -p 5000:5000 bookhub
-python app/main.py # The app will start at http://localhost:5000
+docker run -p 5000:5000 bookhub # The app will start at http://localhost:5000
 ```
 
 ## Requirements
 
 ```pip install -r requirements.txt```
+
+You need ```flask``` and ```requests``` modules.
 
 ## Features
 
@@ -51,5 +52,7 @@ Additional planned features:
 Describe the criteria by which the success of the project can be determined
 (this will be updated in the future)
 
-* Criteria 1
+* Adding working features
+* Adding UI
+* Adding additional features
 
