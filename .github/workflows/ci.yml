@@ -1,4 +1,4 @@
-name: CI/CD
+name: Docker CI
 
 on:
   push:
@@ -7,24 +7,40 @@ on:
   pull_request:
 
 jobs:
-  build-and-test:
+  build-test-docker:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Install dependencies
+      - name: Build Docker image
         run: |
-          pip install --no-cache-dir -r requirements.txt
+          docker build -t bookhub .
 
-      - name: Run Flask in background and test route
+      - name: Run container in background
         run: |
-          python app/main.py &
+          docker run -d -p 5000:5000 --name bookhub_container bookhub
           sleep 5
-          python tests/test_routes.py
+
+      - name: Verify route is accessible
+        run: |
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:5000/)
+          echo "Status code: $STATUS"
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Route check failed."
+            exit 1
+          fi
+
+      - name: Print response JSON
+        run: |
+          curl -s http://localhost:5000/ || exit 1
+
+      - name: Stop and remove container
+        if: always()
+        run: |
+          docker stop bookhub_container
+          docker rm bookhub_container
