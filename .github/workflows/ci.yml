@@ -18,6 +18,10 @@ jobs:
       - name: Build services with Docker Compose
         run: docker compose build
 
+      # 2. Run integration tests
+      - name: Run Docker integration tests
+        run: python tests/integration_docker_test.py
+
       # 2. Start app and verify it runs correctly + routes are accessible
       - name: Start services in background
         run: docker compose up -d
@@ -34,7 +38,7 @@ jobs:
           curl --fail http://localhost:5000/api/books
           curl --fail http://localhost:5000/docs
 
-      # 4. Run Python tests (unit + integration)
+      # 4. Run unit tests
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
