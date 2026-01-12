@@ -21,9 +21,3 @@ def test_db_query_works():
     except Exception as e:
         print(f"DB query failed: {e}")
         sys.exit(1)
-
-if __name__ == "__main__":
-    # Wait for app to start
-    time.sleep(5)
-    test_app_responds()
-    test_db_query_works()

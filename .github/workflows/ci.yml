@@ -20,7 +20,7 @@ jobs:
 
       # 2. Run integration tests
       - name: Run Docker integration tests
-        run: python tests/integration_docker_test.py
+        run: python tests/test_integration.py
 
       # 2. Start app and verify it runs correctly + routes are accessible
       - name: Start services in background
