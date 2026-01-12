@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Not Found - BookHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>⚠️ Oops!</h1>
+    <p>{{ message }}</p>
+    <p><a href="/books">← Browse all books to find a valid ID</a></p>
+    <p><a href="/">← Go back home</a></p>
+</body>
+</html>

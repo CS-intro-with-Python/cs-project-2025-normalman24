@@ -1,0 +1,37 @@
+<!-- app/templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BookHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>📚 BookHub - Share Your Books!</h1>
+
+    <h2>Add a Book</h2>
+    <form action="/add_book" method="post">
+        <input type="text" name="title" placeholder="Title" required><br>
+        <input type="text" name="author" placeholder="Author" required><br>
+        <textarea name="description" placeholder="Description"></textarea><br>
+        <input type="number" name="year" placeholder="Year" required><br>
+        <input type="number" name="pages" placeholder="Pages" required><br>
+        <input type="url" name="cover_url" placeholder="Cover URL (optional)"><br>
+        <button type="submit">Add Book</button>
+    </form>
+
+    <h2>Add Impression</h2>
+<p><em>Find a Book ID on the <a href="/books">All Books</a> page.</em></p>
+    <form action="/add_impression" method="post">
+        <input type="number" name="book_id" min="1" placeholder="Book ID (e.g. 1, 2, ...)" required><br>
+        <textarea name="review" placeholder="Your Review" required></textarea><br>
+        <input type="number" name="score" min="1" max="10" placeholder="Score (1-10)" required><br>
+        <input type="text" name="reading_time" placeholder="Reading time (e.g., '3 days')" required><br>
+        <button type="submit">Submit Impression</button>
+    </form>
+
+    <p>
+        <a href="/books">📖 View All Books</a> |
+        <a href="/docs">📄 API Docs</a>
+    </p>
+</body>
+</html>

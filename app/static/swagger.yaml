@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: BookHub API
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+paths:
+  /books:
+    get:
+      summary: Get all books
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Add a new book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '201':
+          description: Book created
+        '400':
+          description: Invalid input
+
+  /books/{book_id}/impression:
+    post:
+      summary: Add an impression for a book
+      parameters:
+        - name: book_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImpressionInput'
+      responses:
+        '201':
+          description: Impression added
+        '400':
+          description: Invalid input
+        '404':
+          description: Book not found
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        author:
+          type: string
+        description:
+          type: string
+        year:
+          type: integer
+        pages:
+          type: integer
+      required: [id, title, author, year, pages]
+
+    BookInput:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        description:
+          type: string
+        year:
+          type: integer
+        pages:
+          type: integer
+      required: [title, author, year, pages]
+
+    ImpressionInput:
+      type: object
+      properties:
+        review:
+          type: string
+        score:
+          type: integer
+          minimum: 1
+          maximum: 10
+        reading_time:
+          type: string
+      required: [review, score, reading_time]

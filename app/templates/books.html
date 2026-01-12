@@ -1,0 +1,48 @@
+<!-- app/templates/books.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Books - BookHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>📚 All Books</h1>
+    <p><a href="/">← Back to Home</a></p>
+
+    {% if books %}
+        <div class="book-list">
+            {% for book in books %}
+            <div class="book-card" style="border: 1px solid #ddd; padding: 16px; margin-bottom: 20px;">
+                <p><strong>Book ID:</strong> <span style="background: #f0f0f0; padding: 2px 6px; border-radius: 4px;">{{ book.id }}</span></p>
+
+                {% if book.cover_url %}
+                    <img src="{{ book.cover_url }}" alt="{{ book.title }} cover" width="120" style="float: left; margin-right: 16px; margin-bottom: 10px;">
+                {% endif %}
+
+                <h2>{{ book.title }}</h2>
+                <p><strong>Author:</strong> {{ book.author }}</p>
+                <p><strong>Year:</strong> {{ book.year }} | <strong>Pages:</strong> {{ book.pages }}</p>
+                <p>{{ book.description or "No description." }}</p>
+
+                {% if book.impressions %}
+                    <h3>Impressions ({{ book.impressions|length }}):</h3>
+                    {% for imp in book.impressions %}
+                        <div class="impression" style="background: #f9f9f9; padding: 8px; margin: 8px 0;">
+                            <p>⭐ Score: {{ imp.score }}/10</p>
+                            <p><em>"{{ imp.review }}"</em></p>
+                            <p><small>Reading time: {{ imp.reading_time }}</small></p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p><em>No impressions yet.</em></p>
+                {% endif %}
+
+                <div style="clear: both;"></div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No books found. <a href="/">Add one!</a></p>
+    {% endif %}
+</body>
+</html>

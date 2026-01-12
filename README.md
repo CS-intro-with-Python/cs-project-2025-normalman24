@@ -7,8 +7,7 @@
 
 BookHub is a web platform that allows users to share the books they have read.  
 When someone finishes a book, they can upload it to the platform, including:
-
-- Book cover  
+ 
 - Author  
 - Description  
 - Year of publication  
@@ -40,11 +39,6 @@ An impression includes:
 - Overall score (on a 1–10 scale)
 - Period of reading (years, months, days, hours, or "less than 1 hour")
 
-Additional planned features:
-
-- Search by author, title, or year
-- Rating aggregation
-
 ## Git
 
 ```git checkout origin main```
@@ -56,5 +50,3 @@ Describe the criteria by which the success of the project can be determined
 
 * Adding working features
 * Adding UI
-* Adding additional features
-
