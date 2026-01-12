@@ -2,7 +2,6 @@ import unittest
 from app import create_app
 
 class TestIntegration(unittest.TestCase):
-
     def setUp(self):
         self.app, self.db = create_app()
         self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
