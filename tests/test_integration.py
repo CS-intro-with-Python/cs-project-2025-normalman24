@@ -1,21 +1,20 @@
 import unittest
-import tempfile
-import os
 from app import create_app
 
 class TestIntegration(unittest.TestCase):
+
     def setUp(self):
-        self.db_fd, self.db_path = tempfile.mkstemp()
         self.app, self.db = create_app()
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{self.db_path}'
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         self.app.config['TESTING'] = True
         self.client = self.app.test_client()
+
         with self.app.app_context():
             self.db.create_all()
 
     def tearDown(self):
-        os.close(self.db_fd)
-        os.unlink(self.db_path)
+        with self.app.app_context():
+            self.db.session.remove()
 
     def test_add_book(self):
         resp = self.client.post('/api/books', json={
