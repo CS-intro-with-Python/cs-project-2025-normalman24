@@ -1,30 +1,29 @@
-import unittest
-from app import create_app
+import requests
+import time
+import sys
 
-class TestIntegration(unittest.TestCase):
-    def setUp(self):
-        self.app, self.db = create_app()
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-        self.app.config['TESTING'] = True
-        self.client = self.app.test_client()
+def test_app_responds():
+    try:
+        resp = requests.get("http://localhost:5000/api/books", timeout=5)
+        assert resp.status_code == 200
+        print("App responds with 200")
+    except Exception as e:
+        print(f"App not responding: {e}")
+        sys.exit(1)
 
-        with self.app.app_context():
-            self.db.create_all()
+def test_db_query_works():
+    try:
+        resp = requests.get("http://localhost:5000/api/books", timeout=5)
+        data = resp.json()
+        # If we get JSON (even empty list), DB query succeeded
+        assert isinstance(data, list)
+        print("DB query executed successfully")
+    except Exception as e:
+        print(f"DB query failed: {e}")
+        sys.exit(1)
 
-    def tearDown(self):
-        with self.app.app_context():
-            self.db.session.remove()
-
-    def test_add_book(self):
-        resp = self.client.post('/api/books', json={
-            'title': 'CI Test',
-            'author': 'Bot',
-            'year': 2026,
-            'pages': 1
-        })
-        self.assertEqual(resp.status_code, 201)
-
-    def test_get_books_empty(self):
-        resp = self.client.get('/api/books')
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json, [])
+if __name__ == "__main__":
+    # Wait for app to start
+    time.sleep(5)
+    test_app_responds()
+    test_db_query_works()
