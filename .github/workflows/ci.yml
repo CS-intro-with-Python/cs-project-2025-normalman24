@@ -1,44 +1,49 @@
 name: BookHub CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - run: python -m unittest discover -s tests -p "test_*.py"
 
-  docker-build:
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: docker build -t bookhub .
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  routes-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Start services
-        run: docker-compose up -d
+      # 1. Verify Docker image builds successfully (via docker-compose)
+      - name: Build services with Docker Compose
+        run: docker compose build
 
-      - name: Wait for app to be ready
+      # 2. Start app and verify it runs correctly + routes are accessible
+      - name: Start services in background
+        run: docker compose up -d
+
+      - name: Wait for app to be ready and test routes
         run: |
           timeout 30s sh -c '
             while ! curl -sf http://localhost:5000/api/books >/dev/null 2>&1; do
+              echo "Waiting for app to start..."
               sleep 2
             done
-          ' || { echo "App did not start in time"; exit 1; }
+          ' || { echo "App failed to start"; exit 1; }
 
-      - name: Test API route
-        run: curl --fail http://localhost:5000/api/books
+          curl --fail http://localhost:5000/api/books
+          curl --fail http://localhost:5000/docs
 
-      - name: Test Swagger docs
-        run: curl --fail http://localhost:5000/docs
+      # 4. Run Python tests (unit + integration)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-      - name: Shutdown
+      - name: Run tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
+      # Cleanup
+      - name: Shutdown services
         if: always()
-        run: docker-compose down
+        run: docker-compose down -v
