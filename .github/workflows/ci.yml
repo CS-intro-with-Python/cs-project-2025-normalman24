@@ -28,23 +28,6 @@ jobs:
             done
           ' || { echo "App failed to start"; exit 1; }
 
-      - name: Run Docker integration tests
-        run: python tests/test_integration.py
-
-      - name: Start services in background
-        run: docker compose up -d
-
-      - name: Wait for app to be ready and test routes
-        run: |
-          timeout 30s sh -c '
-            while ! curl -sf http://localhost:5000/api/books >/dev/null 2>&1; do
-              echo "Waiting for app to start..."
-              sleep 2
-            done
-          ' || { echo "App failed to start"; exit 1; }
-
-          curl --fail http://localhost:5000/api/books
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -53,7 +36,10 @@ jobs:
       - name: Install test dependencies
         run: pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Run integration tests
+        run: python tests/test_integration.py
+
+      - name: Run unit tests
         run: python -m unittest discover -s tests -p "test_unit.py" -v
 
       - name: Shutdown services
