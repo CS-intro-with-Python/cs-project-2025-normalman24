@@ -71,6 +71,8 @@ components:
           type: integer
         pages:
           type: integer
+        cover_url:
+          type: string
       required: [id, title, author, year, pages]
 
     BookInput:
@@ -86,6 +88,8 @@ components:
           type: integer
         pages:
           type: integer
+        cover_url:
+          type: string
       required: [title, author, year, pages]
 
     ImpressionInput:

@@ -29,8 +29,8 @@ The application will be available at:
 - API documentation: http://localhost:5000/docs
 
 ## Requirements
-- Docker and Docker Compose
-- Python 3.11
+- docker and docker compose 29.1.3
+- python 3.11
 - Flask 3.0.3
 - Flask-SQLAlchemy 3.1.1
 - flask-swagger-ui 0.0.3
@@ -71,5 +71,5 @@ Logs include:
 - **Client**: Browser-based HTML interface
 - **API Docs**: Swagger UI (`/docs`)
 - **Containerization**: Docker Compose
-- **CI/CD**: GitHub Actions + Render.com
+- **CI/CD**: GitHub Actions + [render.com](https://render.com/)
 - **Testing**: `unittest` for unit testing + `requests` for integration testing
