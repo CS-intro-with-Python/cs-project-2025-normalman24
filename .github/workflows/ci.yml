@@ -22,7 +22,7 @@ jobs:
 
       - name: Wait for app to be ready
         run: |
-          timeout s sh -c '
+          timeout 30s sh -c '
             while ! curl -sf http://localhost:5000/api/books >/dev/null 2>&1; do
               sleep 2
             done
