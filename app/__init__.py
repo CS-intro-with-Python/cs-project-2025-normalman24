@@ -26,6 +26,6 @@ def create_app():
 
     with app.app_context():
         db.create_all()
-        app.logger.info("Database initialized.")
+        app.logger.info("🎉 Database initialized.")
 
     return app, db

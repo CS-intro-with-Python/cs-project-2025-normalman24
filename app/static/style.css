@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f7f0;
+    background-color: #a3c5ff;
     color: #333;
     max-width: 800px;
     margin: 0 auto;
@@ -23,11 +23,11 @@ input, textarea {
     box-sizing: border-box;
 }
 button {
-    background-color: #3498db;
+    background-color: #34cddb;
     color: white;
     border: none;
     padding: 10px 16px;
     border-radius: 4px;
     cursor: pointer;
 }
-button:hover { background-color: #2980b9; }
+button:hover { background-color: #2674a6; }

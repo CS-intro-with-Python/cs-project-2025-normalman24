@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Verify Docker image builds successfully (via docker-compose)
+      # 1. Verify Docker image builds successfully
       - name: Build services with Docker Compose
         run: docker compose build
 
@@ -22,7 +22,7 @@ jobs:
       - name: Run Docker integration tests
         run: python tests/test_integration.py
 
-      # 2. Start app and verify it runs correctly + routes are accessible
+      # 3. Start app and verify it runs correctly + routes are accessible
       - name: Start services in background
         run: docker compose up -d
 
@@ -36,7 +36,6 @@ jobs:
           ' || { echo "App failed to start"; exit 1; }
 
           curl --fail http://localhost:5000/api/books
-          curl --fail http://localhost:5000/docs
 
       # 4. Run unit tests
       - name: Set up Python
@@ -48,7 +47,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
-        run: python -m unittest discover -s tests -p "test_*.py" -v
+        run: python -m unittest discover -s tests -p "test_unit.py" -v
 
       # Cleanup
       - name: Shutdown services

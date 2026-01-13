@@ -1,52 +1,73 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/DESIFpxz)
-# CS_2025_project 
-
-[Link](https://cs-project-2025-normalman24.onrender.com)
+# BookHub
 
 ## Description
-
 BookHub is a web platform that allows users to share the books they have read.  
 When someone finishes a book, they can upload it to the platform, including:
- 
-- Author  
-- Description  
-- Year of publication  
+- Book cover (URL)
+- Author
+- Description
+- Year of publication
 - Number of pages
 
+Users can also add their **impressions**, which include:
+- Text review
+- Overall score (1–10)
+- Reading period (e.g., "3 days", "less than 1 hour")
+
 ## Setup
+Use Docker Compose (required by project criteria):
 
-Describe the steps to set up the environment and run the application. This can be a bash script or docker commands.
+```bash
+docker compose up --build
+```
 
-```
-docker build -t bookhub .
-docker run -p 5000:5000 bookhub # The app will start at http://localhost:5000
-```
+The application will be available at:  
+- Web interface: http://localhost:5000  
+- All books (with IDs): http://localhost:5000/books  
+- API documentation: http://localhost:5000/docs
 
 ## Requirements
-
-```pip install -r requirements.txt```
-
-You need ```flask``` and ```requests``` modules.
-
-## Features
-
-Describe the main features the application performs.
-
-The key feature is that users can add their impressions about the book.  
-An impression includes:
-
-- Text (review)
-- Overall score (on a 1–10 scale)
-- Period of reading (years, months, days, hours, or "less than 1 hour")
+- Docker and Docker Compose
+- Python 3.11
+- Flask 3.0.3
+- Flask-SQLAlchemy 3.1.1
+- flask-swagger-ui 0.0.3
+- requests 2.32.5
 
 ## Git
+Stable version is maintained on the `main` branch:
 
-```git checkout origin main```
+```bash
+git checkout main
+```
 
-## Success Criteria
+## How to Run Tests
+From the project root:
 
-Describe the criteria by which the success of the project can be determined
-(this will be updated in the future)
+```bash
+pip install -r requirements.txt
+python tests/test_integration.py # integration tests
+python -m unittest tests/test_unit.py -v # unit tests
+```
 
-* Adding working features
-* Adding UI
+## How to Get Logs
+When running with Docker Compose:
+
+```bash
+docker compose logs -f web
+```
+
+Logs include:
+- Application startup
+- Book additions
+- Impression submissions
+- Errors (invalid input, server issues)
+
+## Technologies Used
+- **Backend**: Flask
+- **Database**: SQLite via `Flask-SQLAlchemy`
+- **Client**: Browser-based HTML interface
+- **API Docs**: Swagger UI (`/docs`)
+- **Containerization**: Docker Compose
+- **CI/CD**: GitHub Actions + Render.com
+- **Testing**: `unittest` for unit testing + `requests` for integration testing

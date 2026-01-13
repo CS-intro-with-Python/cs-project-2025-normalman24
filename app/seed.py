@@ -1,9 +1,8 @@
-# app/seed.py
 from .models import db, Book, Impression
+
 def seed_database():
-    """Add initial books and impressions if database is empty."""
     if Book.query.first() is None:
-        print("Seeding database with sample books...")
+        print("🌱 Seeding database with sample books...")
 
         books_data = [
             {
@@ -11,7 +10,6 @@ def seed_database():
                 "author": "Frank Herbert",
                 "description": "Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, heir to a noble family tasked with ruling an inhospitable world.",
                 "year": 1965,
-                "pages": 688,
                 "pages": 688,
                 "cover_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Dune-FrankHerbert-1965-bookjacket.jpg/220px-Dune-FrankHerbert-1965-bookjacket.jpg"
             },
@@ -53,6 +51,6 @@ def seed_database():
             db.session.add(impression)
 
         db.session.commit()
-        print("Database seeded successfully!")
+        print("✅ Database seeded successfully!")
     else:
-        print("Database already has data. Skipping seed.")
+        print("⏭️ Database already has data. Skipping seed.")
