@@ -31,3 +31,10 @@ button {
     cursor: pointer;
 }
 button:hover { background-color: #2674a6; }
+
+.book-card {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-bottom: 20px;
+    background-color: burlywood;
+}

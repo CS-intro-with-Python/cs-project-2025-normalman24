@@ -18,11 +18,21 @@ jobs:
       - name: Build services with Docker Compose
         run: docker compose build
 
-      # 2. Run integration tests
+      # 2. Wait until app will be ready
+      - name: Wait for app to be ready
+        run: |
+          timeout 30s sh -c '
+            while ! curl -sf http://localhost:5000/api/books >/dev/null 2>&1; do
+              echo "Waiting for app..."
+              sleep 2
+            done
+          ' || { echo "App failed to start"; exit 1; }
+
+      # 3. Run integration tests
       - name: Run Docker integration tests
         run: python tests/test_integration.py
 
-      # 3. Start app and verify it runs correctly + routes are accessible
+      # 4. Start app and verify it runs correctly + routes are accessible
       - name: Start services in background
         run: docker compose up -d
 
@@ -37,7 +47,7 @@ jobs:
 
           curl --fail http://localhost:5000/api/books
 
-      # 4. Run unit tests
+      # 5. Run unit tests
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
